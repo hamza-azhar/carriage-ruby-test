@@ -1,0 +1,19 @@
+connection: &connection
+  adapter: postgresql
+  host: localhost
+  username: postgres
+  password: postgres
+  pool: 5
+  timeout: 5000
+  min_messages: warning
+development:
+  <<: *connection
+  database: carriage_development
+test: &test
+  <<: *connection
+  database: carriage_test
+production:
+  <<: *connection
+  database: carriage_production
+cucumber:
+  <<: *test
