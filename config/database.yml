@@ -1,7 +1,7 @@
 connection: &connection
   adapter: postgresql
   host: localhost
-  username: postgres
+  username: hamza
   password: postgres
   pool: 5
   timeout: 5000

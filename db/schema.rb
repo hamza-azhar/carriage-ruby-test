@@ -75,13 +75,12 @@ ActiveRecord::Schema.define(version: 2018_10_09_190204) do
   end
 
   create_table "users", force: :cascade do |t|
-    t.string "email", default: "", null: false
+    t.string "email"
     t.string "password_digest"
-    t.string "username", default: "", null: false
+    t.string "username"
     t.string "access_token"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["password_digest"], name: "index_users_on_password_digest"
   end
 
   create_table "users_roles", id: false, force: :cascade do |t|
