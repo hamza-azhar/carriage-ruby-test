@@ -20,5 +20,5 @@ class ApplicationController < ActionController::API
     if @error_message.present?
     	render(json: {ok: false, error: @error_message, status: 401}, status: 401) and return
     end
-
+  end
 end
