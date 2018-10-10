@@ -1,5 +1,6 @@
-class UsersController < ActionController::API
-
+class UsersController < ApplicationController
+	before_action :validate_token, only: :get_all_users
+  
   def new
     @user = User.new
   end
@@ -24,6 +25,11 @@ class UsersController < ActionController::API
 		else
 			render json: {status: 401, msg: 'User Not Found'}
 		end
+	end
+
+	def get_all_users
+		@users = User.all
+		render json: {status: 200, users: @users}
 	end
 end
 
