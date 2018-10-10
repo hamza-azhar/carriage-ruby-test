@@ -4,7 +4,7 @@ class Admin::BaseController < ApplicationController
 
   def validate_admin
     @error_message = []
-    if @current_user.present? && !current_user.is_admin?
+    if @current_user.present? && !@current_user.has_role?(:admin)
       @error_message << "You do not have admin rights"
     end
 
