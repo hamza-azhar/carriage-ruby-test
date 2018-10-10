@@ -1,4 +1,4 @@
-class Admin::CardsController < ApplicationController
+class Admin::CardsController < Admin::BaseController
 		before_action :set_card, only: [:show, :update, :destroy]
 
 	def index
