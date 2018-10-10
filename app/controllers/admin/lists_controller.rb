@@ -7,7 +7,8 @@ class Admin::ListsController < Admin::BaseController
 	end
 
 	def create
-		@list = List.new(list_params)
+		@list = @current_user.lists.new(list_params)
+		@list.list_users.build(user_id: @current_user.id, is_creator: true)
 		if @list.save!
 			render(json: {success: true, message: 'List added successfully'}, status: 200)
 		else
@@ -19,7 +20,7 @@ class Admin::ListsController < Admin::BaseController
 		render "show.json"
 	end
 
-	def update
+	def update_list
 		if @list.present? && @list.update(list_params)
 			render(json: {success: true, message: 'List updated successfully'}, status: 200)
 		else
@@ -27,7 +28,7 @@ class Admin::ListsController < Admin::BaseController
 		end
 	end
 
-	def destroy
+	def destroy_list
 		if @list.present? && @list.destroy
 			render(json: {success: true, message: 'List deleted successfully'}, status: 200)
 		else

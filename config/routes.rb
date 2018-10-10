@@ -9,8 +9,10 @@ Rails.application.routes.draw do
   resources :lists, only: [:index, :show]
 
   namespace :admin do
-  	resources :lists do
+  	resources :lists, only: [:create, :index, :show] do
 	  	collection do
+        post :update_list
+        post :destroy_list
 	  		post :assign_member
 	  		post :unassign_member
 	  	end
