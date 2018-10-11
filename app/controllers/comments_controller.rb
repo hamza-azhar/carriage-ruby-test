@@ -1,7 +1,7 @@
 class CommentsController < ApplicationController
 	before_action :set_comment, only: [:show, :update, :destroy]
 	before_action :validate_comment, only: [:show, :update, :destroy]
-	before_action :validate_member_comment, only: :create
+	before_action :validate_member_comment, only: [:create, :index]
 
 	def index
 		@comments = params[:card_id].present? ? Comment.card_comments(params[:card_id]) : Comment.comment_replies(params[:comment_id])
@@ -51,17 +51,19 @@ class CommentsController < ApplicationController
 
 	def validate_comment
 		unless @comment.present?
-			render(json: {success: false, message: "No Cooment Found"}, status: 404)
+			render(json: {success: false, message: "No Comment Found"}, status: 404)
 		end
 	end
 
 	def validate_member_comment
 		card = Card.find_by(id: params[:card_id])
-		if card.present?
-			debugger
-
+		user = User.find_by(id: params[:user_id])
+		unless card.present? || user.present?
+			render(json: {success: false, message: "Record not exists"}, status: 404)
 		else
-			render(json: {success: false, message: "Card not exists"}, status: 404)
+			unless user.has_role?(:admin) && user.list_users.present?
+				render(json: {success: false, message: "Access Denied"}, status: 403)
+			end
 		end
 	end
 end
