@@ -8,6 +8,12 @@ Rails.application.routes.draw do
   end
 
   resources :lists, only: [:index, :show]
+  resources :cards, only: [:index, :show, :create] do
+    collection do
+      post :update_card
+      post :remove_card
+    end
+  end
 
   namespace :admin do
   	resources :lists, only: [:create, :index, :show] do
