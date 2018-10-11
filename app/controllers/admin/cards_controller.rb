@@ -1,6 +1,7 @@
 class Admin::CardsController < Admin::BaseController
 	before_action :set_card, only: [:update_card, :destroy_card]
 	before_action :validate_index_params, only: :index
+	
 	def index
 		@list = List.find_by(id: params[:list_id])
 		if @list.present? 

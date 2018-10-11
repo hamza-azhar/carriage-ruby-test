@@ -1,6 +1,6 @@
 class CardsController < ApplicationController
 	before_action :set_card, only: [:show, :update, :destroy]
-
+	# before_action :validate_token
 	def index
 		@cards = Card.all
 		render(json: {results: @cards}, status: 200)

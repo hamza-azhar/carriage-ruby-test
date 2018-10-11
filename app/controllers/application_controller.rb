@@ -21,4 +21,15 @@ class ApplicationController < ActionController::API
     	render(json: {ok: false, error: @error_message, status: 401}, status: 401) and return
     end
   end
+
+  def validate_member
+    @error_message = []
+    if @current_user.present? && !@current_user.has_role?(:member)
+      @error_message << "You do not have member rights"
+    end
+
+    if @error_message.present?
+      render(json: {ok: false, error: @error_message, status: 401}, status: 401) and return
+    end
+  end
 end
