@@ -17,7 +17,7 @@ class Admin::ListsController < Admin::BaseController
 	end
 
 	def show
-		@list = List.find_by(id: params[:id] )
+		@list = List.includes(:cards).find_by(id: params[:id] )
 		if @list.present? 
 			render "show.json"
 		else

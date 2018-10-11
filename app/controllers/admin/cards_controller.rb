@@ -3,7 +3,7 @@ class Admin::CardsController < Admin::BaseController
 	before_action :validate_index_params, only: :index
 	
 	def index
-		@list = List.find_by(id: params[:list_id])
+		@list = List.includes(:cards).find_by(id: params[:list_id])
 		if @list.present? 
 			@cards = @list.cards
 			render(json: {results: @cards}, status: 200)
@@ -13,7 +13,7 @@ class Admin::CardsController < Admin::BaseController
 	end
 
 	def create
-		@list = List.find_by(id: params[:list_id])
+		@list = List.includes(:cards).find_by(id: params[:list_id])
 		if @list.present?
 			@card = @list.cards.build(card_params)
 			if @card.save!
@@ -27,7 +27,7 @@ class Admin::CardsController < Admin::BaseController
 	end
 
 	def show
-		@card = Card.find_by(id: params[:id])
+		@card = Card.includes(:comments).find_by(id: params[:id])
 		if @card.present?
 			render "show.json"
 		else
