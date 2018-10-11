@@ -1,5 +1,5 @@
 class Admin::ListsController < Admin::BaseController
-	before_action :set_list, only: [:show, :update, :destroy]
+	before_action :set_list, only: [:show, :update_list, :destroy_list]
 
 	def index
 		@lists = List.all
@@ -37,11 +37,15 @@ class Admin::ListsController < Admin::BaseController
 	end
 
 	def assign_member
-		@list_user = ListUser.new(list_id: params[:list_id], user_id: params[:user_id])
-		if @list_user.save!
-			render(json: {success: true, message: 'User added successfully in the list'}, status: 200)
+		if params[:user_id] == @current_user.id
+			render(json: {success: false, message: "user id is not a valid id, you cannot assign list to yourself"}, status: 200)
 		else
-			render(json: {success: false, message: @list_user.errors.full_messages}, status: 200)
+			@list_user = ListUser.new(list_id: params[:list_id], user_id: params[:user_id]) 
+			if @list_user.save
+				render(json: {success: true, message: 'User added successfully in the list'}, status: 200)
+			else
+				render(json: {success: false, message: @list_user.errors.full_messages}, status: 200)
+			end
 		end
 	end
 
@@ -50,7 +54,7 @@ class Admin::ListsController < Admin::BaseController
 		if @list_user.present? && @list_user.destroy
 			render(json: {success: true, message: 'User removed from list successfully'}, status: 200)
 		else
-			render(json: {success: false, message: @list.errors.full_messages}, status: 200)
+			render(json: {success: false, message: @list_user.present? ? @list_user.errors.full_messages : "Invalid list_id or user_id"}, status: 200)
 		end
 	end
 
@@ -60,6 +64,6 @@ class Admin::ListsController < Admin::BaseController
 	end
 
 	def set_list 
-		@list = List.find_by(id: params[:id] )
+		@list = List.find_by(id: params[:list_id] )
 	end
 end
