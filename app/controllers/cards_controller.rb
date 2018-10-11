@@ -1,9 +1,10 @@
 class CardsController < ApplicationController
-	before_action :set_card, only: [:show, :update, :destroy]
-
+	before_action :validate_token, :validate_member
+	before_action :set_card, only: [:show, :update_card, :destroy_card]
+	before_action :list_belongs_to_user?, only: [:create, :show, :update_card, :destroy_card]
 	def index
-		@cards = Card.all
-		render(json: {results: @cards}, status: 200)
+		@lists = @current_user.lists.includes(:cards)
+		render "index.json"
 	end
 
 	def create
@@ -19,7 +20,7 @@ class CardsController < ApplicationController
 		render "show.json"
 	end
 
-	def update
+	def update_card
 		if @card.update(card_params)
 			render(json: {success: true, message: 'Card updated successfully'}, status: 200)
 		else
@@ -27,7 +28,7 @@ class CardsController < ApplicationController
 		end
 	end
 
-	def destroy
+	def destroy_card
 		if @card.destroy
 			render(json: {success: true, message: 'Card deleted successfully'}, status: 200)
 		else
@@ -42,5 +43,13 @@ class CardsController < ApplicationController
 
 	def set_card 
 		@card = Card.find(params[:id])
+	end
+
+	def list_belongs_to_user?
+		@error_message = []
+		@error_message << "Permission Denied, you cannot access this list" unless @current_user.lists.map(&:id).include?(@card.list_id)
+		if @error_message.present?
+			render(json: {ok: false, error: @error_message, status: 401}, status: 401) and return
+		end
 	end
 end
