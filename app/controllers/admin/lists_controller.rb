@@ -17,14 +17,19 @@ class Admin::ListsController < Admin::BaseController
 	end
 
 	def show
-		render "show.json"
+		@list = List.find_by(id: params[:id] )
+		if @list.present? 
+			render "show.json"
+		else
+			render(json: {success: false, message: "List not found"}, status: 200)
+		end
 	end
 
 	def update_list
 		if @list.present? && @list.update(list_params)
 			render(json: {success: true, message: 'List updated successfully'}, status: 200)
 		else
-			render(json: {success: false, message: @list.errors.full_messages}, status: 200)
+			render(json: {success: false, message:  @list.present? ? @list.errors.full_messages : "List not found"}, status: 200)
 		end
 	end
 
@@ -32,7 +37,7 @@ class Admin::ListsController < Admin::BaseController
 		if @list.present? && @list.destroy
 			render(json: {success: true, message: 'List deleted successfully'}, status: 200)
 		else
-			render(json: {success: false, message: @list.errors.full_messages}, status: 200)
+			render(json: {success: false, message:  @list.present? ? @list.errors.full_messages : "List not found"}, status: 200)
 		end
 	end
 

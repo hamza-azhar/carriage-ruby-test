@@ -16,14 +16,14 @@ class User < ApplicationRecord
 	validates :email, :username, presence: true
 
 	def assign_default_role
-  		self.add_role(:member) if self.roles.blank? && self.username != 'Admin'
-  	end
+		self.add_role(:member) if self.roles.blank? && self.username != 'Admin'
+	end
 
-  	def generate_token
-	    loop do
-	      token = SecureRandom.hex(10)
-	      break token unless User.where(access_token: token).exists?
-	    end
+	def generate_token
+    loop do
+      token = SecureRandom.hex(10)
+      break token unless User.where(access_token: token).exists?
+    end
   end
 
 end
