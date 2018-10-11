@@ -1,8 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe User, type: :model do
-	it { should have_many(:user_comments).dependent(:destroy) }
-	it { should have_many(:comments).through(:user_comments) }
 
 	it { should have_many(:list_users).dependent(:destroy) }
 	it { should have_many(:lists).through(:list_users) }
