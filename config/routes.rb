@@ -9,6 +9,8 @@ Rails.application.routes.draw do
 
   resources :lists, only: [:index, :show]
 
+  resources :comments
+
   namespace :admin do
   	resources :lists, only: [:create, :index, :show] do
 	  	collection do
