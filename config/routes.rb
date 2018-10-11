@@ -20,5 +20,12 @@ Rails.application.routes.draw do
 	  		post :unassign_member
 	  	end
 	  end
+
+	  resources :cards, only: [:create, :index, :show] do 
+	  	collection do
+        post :update_card
+        post :destroy_card
+	  	end
+	  end
   end
 end
